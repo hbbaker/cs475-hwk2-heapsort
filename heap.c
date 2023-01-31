@@ -17,6 +17,7 @@
  */
 void heapSort(Employee *A, int n)
 {
+
 	// BuildHeap on the heap
 	buildHeap(A, n);
 
@@ -27,8 +28,8 @@ void heapSort(Employee *A, int n)
 	while (n > 0)
 	{
 		swap(&A[n - 1], &A[0]);
-		heapify(A, 0, n - 1);
 		n--;
+		heapify(A, 0, n);
 	}
 }
 
@@ -43,7 +44,11 @@ void heapSort(Employee *A, int n)
 void buildHeap(Employee *A, int n)
 {
 	// heapify() every element from A[n/2] down-to A[0]
-	heapify(&A[n / 2], n / 2, n);
+
+	for (int i = n / 2; i >= 0; i--)
+	{
+		heapify(A, i, n);
+	}
 }
 
 /**
@@ -63,23 +68,26 @@ void heapify(Employee *A, int i, int n)
 
 	// determine which child has a smaller salary. We'll call the index of this
 	//		element: "smaller"
-	int smaller = left_child;
-
-	if (A[right_child].salary < A[left_child].salary)
-	{
-		smaller = right_child;
-	}
 
 	// recursively check if the salary at A[i] > the salary at A[smaller]. If it is, swap the two.
 	//			Then recursively heapify A[smaller].
 	// Continue recursion as long as i is within range AND either right_child or left_child are still within range.
-	while ((i >= 0 && i < n) && ((right_child >= 0 && right_child < n) || (left_child >= 0 && left_child < n)))
+	if ((i >= 0 && i < n) && ((right_child >= 0 && right_child < n) || (left_child >= 0 && left_child < n)))
 	{
+		int smaller = left_child;
+		if (right_child >= 0 && right_child < n)
+		{
+			if (A[right_child].salary < A[left_child].salary)
+			{
+
+				smaller = right_child;
+			}
+		}
+
 		if (A[i].salary > A[smaller].salary)
 		{
 			swap(&A[i], &A[smaller]);
-			printf("Swapping...");
-			heapify(&A[smaller], smaller, n);
+			heapify(A, smaller, n);
 		}
 	}
 }
@@ -92,9 +100,9 @@ void heapify(Employee *A, int i, int n)
 void swap(Employee *e1, Employee *e2)
 {
 	// swap locations
-	Employee *tmp = e1; // Store e1 in tmp
-	e1 = e2;			// Set e1 to e2
-	e2 = tmp;			// Set e2 to e1 via temp
+	Employee tmp = *e1; // Store contents of e1 ptr in tmp
+	*e1 = *e2;			// Set e1 to e2
+	*e2 = tmp;			// Set e2 to e1 via temp
 }
 
 /**
@@ -104,7 +112,7 @@ void swap(Employee *e1, Employee *e2)
  */
 void printList(Employee *A, int n)
 {
-	// TODO
+	// Print the list making the last element not have a comma.
 
 	for (int i = 0; i < n; i++)
 	{

@@ -7,7 +7,6 @@
 
 typedef struct Employee
 {
-	char name[MAX_NAME_LEN];	/* employee ID */
-	int salary;					/* salary */
+	char name[MAX_NAME_LEN]; /* employee ID */
+	int salary;				 /* salary */
 } Employee;
-
